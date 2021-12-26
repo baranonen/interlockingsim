@@ -1,11 +1,19 @@
-routes = {
+"use strict"
+
+var blockGreen = false
+var conditionsSatisfied = false
+var receivedCommand
+var statusText
+var consoleDiv
+
+var routes = {
 	"Route1": false,
 	"Route2": false,
 	"Route3": false,
 	"Route4": false
 }
 
-blocks = {
+var blocks = {
 	"AC01AYRST": ["Route1", "Route3"],
 	"AC4611BT": ["Route1", "Route3"],
 	"AC4701BT": ["Route1", "Route3"],
@@ -14,7 +22,7 @@ blocks = {
 	"AC4702BT": ["Route2", "Route4"]
 }
 
-requirements = {
+var requirements = {
 	"Route1": ["Route3"],
 	"Route2": ["Route4"],
 	"Route3": ["Route1"],
@@ -27,7 +35,7 @@ function help() {
 
 function showStatus() {
 	statusText = "<br>"
-	for (route in routes) {
+	for (var route in routes) {
 		if (routes[route]) {
 			statusText = statusText + route + ": set<br>"
 		} else {
@@ -69,7 +77,7 @@ function newMessage(msg, color = "white") {
 }
 
 function displayroutes() {
-	for (block in blocks) {
+	for (var block in blocks) {
 		blockGreen = false
 		blocks[block].forEach(i => {
 			if (routes[i]) {
@@ -87,7 +95,7 @@ function displayroutes() {
 function update() {
     requestAnimationFrame(update);
 
-	for (let a in routes) {
+	for (var a in routes) {
 		document.getElementById(a).setAttribute("active", routes[a])
 	}
 	var d = new Date()
@@ -100,6 +108,9 @@ requestAnimationFrame(update);
 
 function consolesend() {
 	receivedCommand = document.getElementById("consoleinput").value.split(/(\s+)/).filter( e => e.trim().length > 0)
+	if (receivedCommand == "") {
+		return
+	}
 	consoleDiv.insertAdjacentHTML("beforeend", "<p style='margin-bottom: 10px'> >>> " + document.getElementById("consoleinput").value + "</p>")
     consoleDiv.scrollTop = consoleDiv.scrollHeight
 	document.getElementById("consoleinput").value = ""
